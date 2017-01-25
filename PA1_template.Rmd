@@ -161,7 +161,7 @@ table(steps$day_type1)
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+```{r activitypatterns, echo=TRUE, results = "asis"}
 
 str(steps_meanInt1)
 steps$weekday <- weekdays(as.Date(steps$date))
@@ -196,4 +196,4 @@ print(p01)
 
 ```
 
-
+#asdf
