@@ -192,7 +192,7 @@ p01 <- g01 + geom_point(size=2, color = "purple") + facet_grid(. ~ day_type1) +
   geom_line(color="brown") + ylab("Average") +
   labs(title = "Average") 
 
-print(p01)
+p01
 
 ```
 

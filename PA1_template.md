@@ -73,7 +73,7 @@ print(stepsmean_table, type = "html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 15:48:49 2017 -->
+<!-- Wed Jan 25 15:50:55 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> mean </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right">  </td> </tr>
@@ -150,7 +150,7 @@ print(stepsmedian_table, type="html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 15:48:49 2017 -->
+<!-- Wed Jan 25 15:50:55 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> median </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right">  </td> </tr>
@@ -362,7 +362,7 @@ print(steps_meanInt_mean_table, type="html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 15:48:50 2017 -->
+<!-- Wed Jan 25 15:50:57 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> mean </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right"> 37.38 </td> </tr>
@@ -440,7 +440,7 @@ print(steps_meanInt_median_table, type="html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 15:48:50 2017 -->
+<!-- Wed Jan 25 15:50:57 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> median </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right"> 34.11 </td> </tr>
@@ -582,7 +582,7 @@ print(mean_comparison_table, type="html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 15:48:50 2017 -->
+<!-- Wed Jan 25 15:50:57 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> mean.x </th> <th> mean.y </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right">  </td> <td align="right"> 37.38 </td> </tr>
@@ -728,7 +728,7 @@ print(sum_comparison_table, type = "html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 15:48:50 2017 -->
+<!-- Wed Jan 25 15:50:57 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> sum.x </th> <th> sum.y </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right">  </td> <td align="right"> 10766.19 </td> </tr>
@@ -918,7 +918,7 @@ p01 <- g01 + geom_point(size=2, color = "purple") + facet_grid(. ~ day_type1) +
   geom_line(color="brown") + ylab("Average") +
   labs(title = "Average") 
 
-print(p01)
+p01
 ```
 
 ![](PA1_template_files/figure-html/activitypatterns-1.png)<!-- -->
