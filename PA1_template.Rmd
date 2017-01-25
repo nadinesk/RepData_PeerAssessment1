@@ -20,7 +20,7 @@ steps <- read.csv("activity.csv")
 
 steps$date <- as.Date(as.character(steps$date))
 steps$date <- format(steps$date, "%m/%d/%y")
-steps$date <- format(steps$date, "%Y-%m-%d")
+
 str(steps)
 
 ```

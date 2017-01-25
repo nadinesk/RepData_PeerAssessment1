@@ -31,6 +31,15 @@ steps <- read.csv("activity.csv")
 
 steps$date <- as.Date(as.character(steps$date))
 steps$date <- format(steps$date, "%m/%d/%y")
+
+str(steps)
+```
+
+```
+## 'data.frame':	17568 obs. of  3 variables:
+##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ date    : chr  "10/01/12" "10/01/12" "10/01/12" "10/01/12" ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
 ```
 
 ## What is mean total number of steps taken per day?
@@ -64,7 +73,7 @@ print(stepsmean_table, type = "html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 14:52:25 2017 -->
+<!-- Wed Jan 25 15:48:49 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> mean </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right">  </td> </tr>
@@ -141,7 +150,7 @@ print(stepsmedian_table, type="html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 14:52:25 2017 -->
+<!-- Wed Jan 25 15:48:49 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> median </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right">  </td> </tr>
@@ -353,7 +362,7 @@ print(steps_meanInt_mean_table, type="html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 14:52:27 2017 -->
+<!-- Wed Jan 25 15:48:50 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> mean </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right"> 37.38 </td> </tr>
@@ -431,7 +440,7 @@ print(steps_meanInt_median_table, type="html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 14:52:27 2017 -->
+<!-- Wed Jan 25 15:48:50 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> median </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right"> 34.11 </td> </tr>
@@ -573,7 +582,7 @@ print(mean_comparison_table, type="html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 14:52:27 2017 -->
+<!-- Wed Jan 25 15:48:50 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> mean.x </th> <th> mean.y </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right">  </td> <td align="right"> 37.38 </td> </tr>
@@ -719,7 +728,7 @@ print(sum_comparison_table, type = "html")
 ```
 
 <!-- html table generated in R 3.3.1 by xtable 1.8-2 package -->
-<!-- Wed Jan 25 14:52:27 2017 -->
+<!-- Wed Jan 25 15:48:50 2017 -->
 <table border=1>
 <tr> <th>  </th> <th> date </th> <th> sum.x </th> <th> sum.y </th>  </tr>
   <tr> <td align="right"> 1 </td> <td> 10/01/12 </td> <td align="right">  </td> <td align="right"> 10766.19 </td> </tr>
@@ -785,6 +794,133 @@ print(sum_comparison_table, type = "html")
   <tr> <td align="right"> 61 </td> <td> 11/30/12 </td> <td align="right">  </td> <td align="right"> 10766.19 </td> </tr>
    </table>
 
+```r
+steps$weekday <- weekdays(as.Date(steps$date))
+
+str(steps)
+```
+
+'data.frame':	17568 obs. of  4 variables:
+ $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ date    : chr  "10/01/12" "10/01/12" "10/01/12" "10/01/12" ...
+ $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+ $ weekday : chr  "Tuesday" "Tuesday" "Tuesday" "Tuesday" ...
+
+```r
+table(steps$weekday)
+```
+
+
+   Friday    Monday  Saturday    Sunday  Thursday   Tuesday Wednesday 
+     1152      1152      1152       864       576      1152       864 
+
+```r
+steps$day_type <- gsub('Saturday|Sunday', 'weekend',steps$weekday )
+
+steps$day_type1 <- gsub('Monday|Tuesday|Wednesday|Thursday|Friday', 'weekday',steps$day_type )
+
+table(steps$day_type1)
+```
+
+
+weekday weekend 
+   4896    2016 
+
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+
+```r
+str(steps_meanInt1)
+```
+
+'data.frame':	17568 obs. of  3 variables:
+ $ steps   : num  1.717 0.3396 0.1321 0.1509 0.0755 ...
+ $ date    : chr  "10/01/12" "10/01/12" "10/01/12" "10/01/12" ...
+ $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+
+```r
+steps$weekday <- weekdays(as.Date(steps$date))
+table(steps$weekday, useNA="always")
+```
+
+
+   Friday    Monday  Saturday    Sunday  Thursday   Tuesday Wednesday 
+     1152      1152      1152       864       576      1152       864 
+     <NA> 
+    10656 
+
+```r
+steps_meanInt1$betterdate <- as.Date(steps_meanInt1$date, "%m/%d/%y")
+
+str(steps)
+```
+
+'data.frame':	17568 obs. of  6 variables:
+ $ steps    : int  NA NA NA NA NA NA NA NA NA NA ...
+ $ date     : chr  "10/01/12" "10/01/12" "10/01/12" "10/01/12" ...
+ $ interval : int  0 5 10 15 20 25 30 35 40 45 ...
+ $ weekday  : chr  "Tuesday" "Tuesday" "Tuesday" "Tuesday" ...
+ $ day_type : chr  "Tuesday" "Tuesday" "Tuesday" "Tuesday" ...
+ $ day_type1: chr  "weekday" "weekday" "weekday" "weekday" ...
+
+```r
+steps_meanInt1$weekday <- weekdays(steps_meanInt1$betterdate)
+
+table(steps_meanInt1$weekday)
+```
+
+
+   Friday    Monday  Saturday    Sunday  Thursday   Tuesday Wednesday 
+     2592      2592      2304      2304      2592      2592      2592 
+
+```r
+steps_meanInt1$day_type <- gsub('Saturday|Sunday', 'weekend',steps_meanInt1$weekday )
+
+steps_meanInt1$day_type1 <- gsub('Monday|Tuesday|Wednesday|Thursday|Friday', 'weekday',steps_meanInt1$day_type )
+
+table(steps$day_type1)
+```
+
+
+weekday weekend 
+   4896    2016 
+
+```r
+steps1 <- steps %>% 
+          group_by(interval, day_type1) %>%
+          summarize(meanint1 = mean(steps, na.rm=TRUE))
+
+steps1
+```
+
+Source: local data frame [864 x 3]
+Groups: interval [?]
+
+   interval day_type1  meanint1
+      <int>     <chr>     <dbl>
+1         0   weekday 7.3636364
+2         0   weekend 0.0000000
+3         0      <NA> 0.2857143
+4         5   weekday 1.6363636
+5         5   weekend 0.0000000
+6         5      <NA> 0.0000000
+7        10   weekday 0.6363636
+8        10   weekend 0.0000000
+9        10      <NA> 0.0000000
+10       15   weekday 0.7272727
+# ... with 854 more rows
+
+```r
+g01 <- ggplot(steps1, aes(interval, meanint1))
+p01 <- g01 + geom_point(size=2, color = "purple") + facet_grid(. ~ day_type1) + 
+  geom_line(color="brown") + ylab("Average") +
+  labs(title = "Average") 
+
+print(p01)
+```
+
+![](PA1_template_files/figure-html/activitypatterns-1.png)<!-- -->
+
+#asdf
