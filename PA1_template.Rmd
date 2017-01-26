@@ -4,196 +4,149 @@ output:
   html_document:
     keep_md: true
 ---
-##Load packages
-```{r echo=TRUE}
-
-library(dplyr)    
-
-```
 
 ## Loading and preprocessing the data
 ```{r loadData, echo=TRUE}
 
-setwd("D:/New_folder/RepData_PeerAssessment1/")
-
+setwd("D:/RepData_PeerAssessment1/")
 steps <- read.csv("activity.csv")
 
 steps$date <- as.Date(as.character(steps$date))
-steps$date <- format(steps$date, "%m/%d/%y")
 
-str(steps)
 
 ```
 
 ## What is mean total number of steps taken per day?
-```{r total_mean_median_Steps, echo=TRUE, results="asis"}
+Histogram of the total number of steps taken each day
+```{r histogram_total_steps, echo=TRUE}
 
+library(dplyr)
 library(xtable)
 
 steps_total <- steps %>%
   group_by(date) %>%
   summarize(sum = sum(steps))
 
-hist(steps_total$sum)
-
-steps_mean <- steps %>%
-  group_by(date) %>%
-  summarize(mean = mean(steps))
-
-stepsmean_table <- xtable(steps_mean)
-
-print(stepsmean_table, type = "html")
-
-steps_median <- steps %>%
-  group_by(date) %>%
-  summarize(median = median(steps))
-
-stepsmedian_table <- xtable(steps_median)
-
-print(stepsmedian_table, type="html")
+hist(steps_total$sum, main = "Histogram of Total Number of Daily Steps", xlab = "Total Steps")
 
 ```
 
+The mean total number of steps taken per day
+```{r meanMedian_totalSteps, echo=TRUE}
+
+mean_TS <- mean(steps_total$sum, na.rm = TRUE)
+mean_TS
+
+median_TS <- median(steps_total$sum, na.rm = TRUE)
+median_TS
+
+```
+
+The mean total number of steps taken per day is `r format(round(mean_TS, 2), nsmall=2)`. The median total number of steps taken per day is `r format(round(median_TS,2), nsmall=2)`.
 
 ## What is the average daily activity pattern?
+Time series plot of 5-minute interval and average number of steps taken
 ```{r avgdailyactivity, echo=TRUE}
 
 library(ggplot2)
 
-stepsint_avg <- steps %>%
-                  group_by(interval) %>%
-                  summarize(meanInt = mean(steps, na.rm=TRUE))
+s_int <- steps %>%
+  group_by(interval) %>%
+  summarize(avg_steps = mean(steps, na.rm=TRUE))
 
-tbl_df(stepsint_avg)
-
-ts_int <- ggplot(data=stepsint_avg, aes(x=interval, y=meanInt))  + geom_line() + ggtitle("Average Steps Taken by Interval Across All Days") +xlab("Interval") + ylab("Average Steps")
+ts_int <- ggplot(data=s_int, aes(x=interval, y=avg_steps))  + geom_line() + ggtitle("Average Steps Taken by Interval Across All Days") +xlab("Interval") + ylab("Average Steps")
 
 ts_int
 
-max_avg_int <- filter(stepsint_avg, meanInt == max(stepsint_avg$meanInt))
+```
 
-max_avg_int$interval
+Five-minute interval, on average across all days, with maximum number of steps
+```{r maxStepsInt, echo=TRUE}
 
+max_int <- filter(s_int, avg_steps == max(s_int$avg_steps))
 
 ```
+Interval `r max_int$interval`, with `r round(max_int$avg_steps,2), nsmall=2), steps, has the maximum number of steps, on average across all days in the dataset.
 
 
 ## Imputing missing values
-```{r missingVals, echo=TRUE, results = "asis"}
+```{r missingVals, echo=TRUE}
 
 missing_count <- sum(is.na(steps$steps))
 
 missing_count
 
-steps_meanInt1 <- steps %>%
+```
+There are `r missing_count` missing values in the dataset. 
+
+Fill in missing values with 5-minute interval mean, and create new dataset with filled in missing values.
+```{r fillMissing_vals, echo=TRUE}
+steps_mi <- steps %>%
     group_by(interval) %>%
-    mutate(meanIntsteps = mean(steps, na.rm=TRUE))
+    mutate(meanInt = mean(steps, na.rm=TRUE))
 
-steps_meanInt1
+steps_mi$steps <- ifelse(is.na(steps_mi$steps) == TRUE, steps_mi$meanInt, steps_mi$steps)
 
-steps_meanInt1$steps <- ifelse(is.na(steps_meanInt1$steps) == TRUE, steps_meanInt1$meanIntsteps, steps_meanInt1$steps)
+steps_mi1 <- data.frame(steps_mi[c(1:3)])
 
-steps_meanInt1
 
-steps_meanInt1 <- data.frame(steps_meanInt1[c(1:3)])
+```
 
-str(steps_meanInt1)
+Histogram of total number of steps taken each day, with imputed missing values. 
+```{r hist_total_nomv, echo=TRUE}
 
-steps_meanInt_sum <- steps_meanInt1 %>%
+steps_mi1.sum <- steps_mi1 %>%
                       group_by(date) %>%
                       summarize(sum = sum(steps))
 
 
-hist(steps_meanInt_sum$sum)
+hist(steps_mi1.sum$sum, main = "Histogram of Total Number of Daily Steps (Imputed Missing Values)", xlab = "Total Steps")
 
-steps_meanInt_mean <- steps_meanInt1 %>%
-                      group_by(date) %>%
-                      summarize(mean = mean(steps))
+mean_IV_TS <- mean(steps_mi1.sum$sum)
+mean_IV_TS
 
-steps_meanInt_mean_table <- xtable(steps_meanInt_mean)
+median_IV_TS <- median(steps_mi1.sum$sum)
+median_IV_TS
 
-print(steps_meanInt_mean_table, type="html")
+mean_var <- mean_TS - mean_IV_TS
 
-steps_meanInt_median <- steps_meanInt1 %>%
-                      group_by(date) %>%
-                      summarize(median = median(steps))
-                      
-
-steps_meanInt_median_table <- xtable(steps_meanInt_median)
-
-print(steps_meanInt_median_table, type="html")
-
-mean_comparison <- merge(steps_mean,steps_meanInt_mean, by.x="date", by.y = "date" )
-
-mean_comparison
-
-mean_comparison_table <- xtable(mean_comparison)
-
-print(mean_comparison_table, type="html")
-
-median_comparison <- merge(steps_median, steps_meanInt_median, by.x = "date", by.y = "date")
-
-median_comparison
-
-media_comparison_table <- xtable(median_comparison, type="html")
-
-sum_comparison <- merge(steps_total, steps_meanInt_sum, by.x="date", by.y="date")
-
-sum_comparison_table <- xtable(sum_comparison)
-
-print(sum_comparison_table, type = "html")
-
-steps$weekday <- weekdays(as.Date(steps$date))
-
-str(steps)
-
-table(steps$weekday)
-
-steps$day_type <- gsub('Saturday|Sunday', 'weekend',steps$weekday )
-
-steps$day_type1 <- gsub('Monday|Tuesday|Wednesday|Thursday|Friday', 'weekday',steps$day_type )
-
-table(steps$day_type1)
+median_var <- median_TS - median_IV_TS
 
 ```
 
+The mean and median total number of steps taken per day with imputed missing values are:
+
+1. mean: `r format(round(mean_IV_TS, 2), nsmall=2)`
+2. median: `r format(round(median_IV_TS, 2), nsmall=2)`
+
+The mean and median total number of steps taken per day without imputed missing values is `r format(round(mean_TS, 2), nsmall=2)` and `r format(round(median_TS,2), nsmall=2)`, respectively. 
+
+The difference between the mean without imputed values and the mean with imputed values is `r format(round(mean_var,2), nsmall=2)`. 
+
+The difference between the median without imputed values and the median with imputed values is `r format(round(median_var,2), nsmall=2)`. 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
 ```{r activitypatterns, echo=TRUE, results = "asis"}
 
-str(steps_meanInt1)
-steps$weekday <- weekdays(as.Date(steps$date))
-table(steps$weekday, useNA="always")
+steps_mi1$weekday <- weekdays(as.Date(steps_mi1$date))
 
-steps_meanInt1$betterdate <- as.Date(steps_meanInt1$date, "%m/%d/%y")
+steps_mi1$day_type <- gsub('Saturday|Sunday', 'weekend',steps_mi1$weekday )
 
-str(steps)
+steps_mi1$day_type1 <- gsub('Monday|Tuesday|Wednesday|Thursday|Friday', 'weekday',steps_mi1$day_type )
 
-steps_meanInt1$weekday <- weekdays(steps_meanInt1$betterdate)
+stepsmi1_wd <- steps_mi1 %>% 
+          group_by(day_type1, interval) %>%
+          summarize(meanint1 = mean(steps))
 
-table(steps_meanInt1$weekday)
-
-steps_meanInt1$day_type <- gsub('Saturday|Sunday', 'weekend',steps_meanInt1$weekday )
-
-steps_meanInt1$day_type1 <- gsub('Monday|Tuesday|Wednesday|Thursday|Friday', 'weekday',steps_meanInt1$day_type )
-
-table(steps$day_type1)
-
-steps1 <- steps %>% 
-          group_by(interval, day_type1) %>%
-          summarize(meanint1 = mean(steps, na.rm=TRUE))
-
-steps1
-
-g01 <- ggplot(steps1, aes(interval, meanint1))
-p01 <- g01 + geom_point(size=2, color = "purple") + facet_grid(. ~ day_type1) + 
-  geom_line(color="brown") + ylab("Average") +
-  labs(title = "Average") 
+g01 <- ggplot(stepsmi1_wd, aes(interval, meanint1))
+p01 <- g01  + facet_wrap(~ day_type1, nrow=2, ncol=1) + 
+  geom_line(color="brown") + ylab("Number of Steps") + 
+  labs(title = "Total Steps by Weekday Type") 
 
 p01
 
 ```
 
-#asdf
+
