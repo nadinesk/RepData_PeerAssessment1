@@ -8,7 +8,6 @@ output:
 ## Loading and preprocessing the data
 ```{r loadData, echo=TRUE}
 
-setwd("")
 steps <- read.csv("activity.csv")
 
 steps$date <- as.Date(as.character(steps$date))

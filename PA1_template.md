@@ -3,7 +3,6 @@
 ## Loading and preprocessing the data
 
 ```r
-setwd("/Users/nadinekhattak/Desktop/RepData_PeerAssessment1")
 steps <- read.csv("activity.csv")
 
 steps$date <- as.Date(as.character(steps$date))
