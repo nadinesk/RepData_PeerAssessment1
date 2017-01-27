@@ -8,7 +8,7 @@ output:
 ## Loading and preprocessing the data
 ```{r loadData, echo=TRUE}
 
-setwd("D:/RepData_PeerAssessment1/")
+setwd("")
 steps <- read.csv("activity.csv")
 
 steps$date <- as.Date(as.character(steps$date))
@@ -65,8 +65,10 @@ Five-minute interval, on average across all days, with maximum number of steps
 
 max_int <- filter(s_int, avg_steps == max(s_int$avg_steps))
 
+max_int
+
 ```
-Interval `r max_int$interval`, with `r round(max_int$avg_steps,2), nsmall=2), steps, has the maximum number of steps, on average across all days in the dataset.
+Interval `r max_int$interval`, with `r format(round(max_int$avg_steps,2), nsmall=2)`, steps, has the maximum number of steps, on average across all days in the dataset.
 
 
 ## Imputing missing values
@@ -121,9 +123,9 @@ The mean and median total number of steps taken per day with imputed missing val
 
 The mean and median total number of steps taken per day without imputed missing values is `r format(round(mean_TS, 2), nsmall=2)` and `r format(round(median_TS,2), nsmall=2)`, respectively. 
 
-The difference between the mean without imputed values and the mean with imputed values is `r format(round(mean_var,2), nsmall=2)`. 
+The difference between the mean without imputed values and the mean with imputed values is: `mean_TS - mean_IV_TS` = `r format(round(mean_var,2), nsmall=2)`. 
 
-The difference between the median without imputed values and the median with imputed values is `r format(round(median_var,2), nsmall=2)`. 
+The difference between the median without imputed values and the median with imputed values is: `median_TS - median_IV_TS` = `r format(round(median_var,2), nsmall=2)`. 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?

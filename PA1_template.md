@@ -3,7 +3,7 @@
 ## Loading and preprocessing the data
 
 ```r
-setwd("D:/RepData_PeerAssessment1/")
+setwd("/Users/nadinekhattak/Desktop/RepData_PeerAssessment1")
 steps <- read.csv("activity.csv")
 
 steps$date <- as.Date(as.character(steps$date))
@@ -35,13 +35,7 @@ library(dplyr)
 
 ```r
 library(xtable)
-```
 
-```
-## Warning: package 'xtable' was built under R version 3.3.2
-```
-
-```r
 steps_total <- steps %>%
   group_by(date) %>%
   summarize(sum = sum(steps))
@@ -78,13 +72,7 @@ Time series plot of 5-minute interval and average number of steps taken
 
 ```r
 library(ggplot2)
-```
 
-```
-## Warning: package 'ggplot2' was built under R version 3.3.2
-```
-
-```r
 s_int <- steps %>%
   group_by(interval) %>%
   summarize(avg_steps = mean(steps, na.rm=TRUE))
@@ -100,8 +88,17 @@ Five-minute interval, on average across all days, with maximum number of steps
 
 ```r
 max_int <- filter(s_int, avg_steps == max(s_int$avg_steps))
+
+max_int
 ```
-Interval 835, with `r round(max_int$avg_steps,2), nsmall=2), steps, has the maximum number of steps, on average across all days in the dataset.
+
+```
+## # A tibble: 1 x 2
+##   interval avg_steps
+##      <int>     <dbl>
+## 1      835  206.1698
+```
+Interval 835, with 206.17, steps, has the maximum number of steps, on average across all days in the dataset.
 
 
 ## Imputing missing values
@@ -173,9 +170,9 @@ The mean and median total number of steps taken per day with imputed missing val
 
 The mean and median total number of steps taken per day without imputed missing values is 10766.19 and 10765.00, respectively. 
 
-The difference between the mean without imputed values and the mean with imputed values is 0.00. 
+The difference between the mean without imputed values and the mean with imputed values is: `mean_TS - mean_IV_TS` = 0.00. 
 
-The difference between the median without imputed values and the median with imputed values is -1.19. 
+The difference between the median without imputed values and the median with imputed values is: `median_TS - median_IV_TS` = -1.19. 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
